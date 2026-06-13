@@ -1,5 +1,6 @@
-package com.dalvikjoss;
+package com.dalvikjoss.core;
 
+import com.dalvikjoss.web.Server;
 import fi.iki.elonen.NanoHTTPD;
 import java.io.File;
 
@@ -13,16 +14,8 @@ public class Main {
             }
         }
 
-        File workspaceDir = new File("/data/data/com.termux/files/home/dalvikjoss");
-        File distDir = new File(workspaceDir, "dist");
-        File distServerDir = new File(workspaceDir, "dist-server");
-
-        if (!distDir.exists() || !distDir.isDirectory()) {
-            System.exit(1);
-        }
-        if (!distServerDir.exists() || !distServerDir.isDirectory()) {
-            System.exit(1);
-        }
+        File distDir = new File("dist");
+        File distServerDir = new File("dist-server");
 
         try {
             final Server server = new Server(port, distDir, distServerDir);

@@ -3,6 +3,7 @@ import { StoreContext } from './context/StoreContext';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
+import { NotFound } from './pages/NotFound';
 
 export class App extends Component {
   constructor(props) {
@@ -39,11 +40,14 @@ export class App extends Component {
     const { route } = this.state;
     const { initialState } = this.props;
 
+    let Content = NotFound;
+    if (route === '/') Content = Home;
+    else if (route === '/about') Content = About;
+
     return (
       <StoreContext.Provider value={initialState || {}}>
         <Layout currentRoute={route}>
-          {route === '/' && <Home />}
-          {route === '/about' && <About />}
+          <Content />
         </Layout>
       </StoreContext.Provider>
     );

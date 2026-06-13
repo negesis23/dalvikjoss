@@ -1,4 +1,6 @@
-package com.dalvikjoss;
+package com.dalvikjoss.web;
+
+import com.dalvikjoss.core.Utils;
 
 public class TemplateInjector {
     private final String template;

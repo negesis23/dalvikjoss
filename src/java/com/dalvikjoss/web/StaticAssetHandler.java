@@ -1,4 +1,6 @@
-package com.dalvikjoss;
+package com.dalvikjoss.web;
+
+import com.dalvikjoss.core.Utils;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.Response;

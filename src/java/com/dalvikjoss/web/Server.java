@@ -1,4 +1,7 @@
-package com.dalvikjoss;
+package com.dalvikjoss.web;
+
+import com.dalvikjoss.core.Utils;
+import com.dalvikjoss.engine.JsEngine;
 
 import fi.iki.elonen.NanoHTTPD;
 import java.io.File;

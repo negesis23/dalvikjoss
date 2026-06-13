@@ -1,4 +1,4 @@
-package com.dalvikjoss;
+package com.dalvikjoss.engine;
 
 import com.quickjs.JSContext;
 import com.quickjs.JavaCallback;

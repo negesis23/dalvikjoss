@@ -1,7 +1,7 @@
 import { h, Fragment, isSSR } from 'nano-jsx';
 
 export const Layout = ({ children, currentRoute }) => {
-  const path = currentRoute || (isSSR() ? globalThis._nano.location.pathname : window.location.pathname);
+  const path = currentRoute || (isSSR() ? (globalThis._nano && globalThis._nano.location ? globalThis._nano.location.pathname : '/') : window.location.pathname);
   
   return (
     <div>

@@ -16,7 +16,7 @@ console.log("=== 2. Compiling Java Classes ===");
 const binDir = path.resolve('bin');
 if (!fs.existsSync(binDir)) fs.mkdirSync(binDir);
 const cp = 'libs/nanohttpd-dex.jar:libs/quickjs-android-java7-dex.jar';
-run(`ecj -d bin -cp ${cp} src/java/com/dalvikjoss/*.java`);
+run(`ecj -d bin -cp ${cp} src/java/com/dalvikjoss/core/*.java src/java/com/dalvikjoss/web/*.java src/java/com/dalvikjoss/engine/*.java`);
 
 console.log("=== 3. Dexing Classes ===");
 const buildDir = path.resolve('build');

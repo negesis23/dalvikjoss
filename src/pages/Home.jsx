@@ -1,19 +1,21 @@
+import { h, Fragment, useContext } from 'nano-jsx';
+import { StoreContext } from '../context/StoreContext';
 import { Counter } from '../components/Counter';
 
 export const Home = () => {
+  const store = useContext(StoreContext);
   return (
     <div>
       <section className="hero">
-        <h1>Welcome to DalvikJoss</h1>
-        <p>
-          A high-performance, lightweight SSR SPA environment running inside a 
-          Dalvik VM on Android. Powered by Java, NanoHTTPD, QuickJS, and NanoJSX.
-        </p>
+        <h1>DalvikJoss Enterprise</h1>
+        <p>SSR SPA running inside DalvikVM + QuickJS</p>
       </section>
-
+      <section className="card">
+        <h2>Server Data Rehydrated</h2>
+        <pre>{JSON.stringify(store.data, null, 2)}</pre>
+      </section>
       <section className="card">
         <h2>Interactive Counter</h2>
-        <p>This component is rendered on the server with initial state and hydrated interactively on the client side.</p>
         <Counter />
       </section>
     </div>

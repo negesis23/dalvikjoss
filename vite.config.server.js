@@ -4,14 +4,14 @@ export default defineConfig({
   esbuild: {
     jsx: 'transform',
     jsxFactory: 'h',
-    jsxFragment: 'Fragment',
-    jsxInject: `import { h, Fragment } from 'nano-jsx'`
+    jsxFragment: 'Fragment'
   },
   build: {
     ssr: true,
     lib: {
       entry: 'src/server.jsx',
-      formats: ['cjs'],
+      formats: ['iife'],
+      name: 'DalvikJossServer',
       fileName: 'server'
     },
     outDir: 'dist-server',

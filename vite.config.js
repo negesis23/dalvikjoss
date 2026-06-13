@@ -4,8 +4,7 @@ export default defineConfig({
   esbuild: {
     jsx: 'transform',
     jsxFactory: 'h',
-    jsxFragment: 'Fragment',
-    jsxInject: `import { h, Fragment } from 'nano-jsx'`
+    jsxFragment: 'Fragment'
   },
   build: {
     outDir: 'dist',

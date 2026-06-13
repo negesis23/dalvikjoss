@@ -1,5 +1,6 @@
-import { hydrate } from 'nano-jsx';
+import { h, Fragment, hydrate } from 'nano-jsx';
 import { App } from './app';
 import './index.css';
 
-hydrate(<App />, document.getElementById('app'));
+const initialState = window.__INITIAL_STATE__ || {};
+hydrate(<App initialState={initialState} />, document.getElementById('app'));

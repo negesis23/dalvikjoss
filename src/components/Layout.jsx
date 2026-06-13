@@ -1,30 +1,22 @@
-import { isSSR, Router } from 'nano-jsx';
+import { h, Fragment, isSSR } from 'nano-jsx';
 
-export const Layout = ({ children }) => {
-  const currentPath = isSSR() ? globalThis._nano.location.pathname : window.location.pathname;
-
+export const Layout = ({ children, currentRoute }) => {
+  const path = currentRoute || (isSSR() ? globalThis._nano.location.pathname : window.location.pathname);
+  
   return (
     <div>
       <header>
         <div className="nav-container">
-          <Router.Link to="/" className="brand">dalvikjoss</Router.Link>
+          <a href="/" className="brand">dalvikjoss</a>
           <nav>
-            <Router.Link to="/" className={`nav-link${currentPath === '/' ? ' active' : ''}`}>
-              Home
-            </Router.Link>
-            <Router.Link to="/about" className={`nav-link${currentPath === '/about' ? ' active' : ''}`}>
-              About
-            </Router.Link>
+            <a href="/" className={`nav-link${path === '/' ? ' active' : ''}`}>Home</a>
+            <a href="/about" className={`nav-link${path === '/about' ? ' active' : ''}`}>About</a>
           </nav>
         </div>
       </header>
-      <main className="container">
-        {children}
-      </main>
+      <main className="container">{children}</main>
       <footer>
-        <p>&copy; 2026 dalvikjoss.
-        <br/> SSR SPA running on DalvikVM + QuickJS.
-        </p>
+        <p>&copy; 2026 dalvikjoss.<br/>SSR SPA running on DalvikVM + QuickJS.</p>
       </footer>
     </div>
   );

@@ -15,29 +15,23 @@ public class JsEngine {
     public String render(String path) {
         JSContext context = contextThreadLocal.get();
         if (context == null) {
-            System.out.println("Initializing QuickJS context on thread: " + Thread.currentThread().getName());
             QuickJS runtime = QuickJS.createRuntime();
             context = runtime.createContext();
-            
-            // Set up SSR flag in _nano global object
-            context.executeStringScript("globalThis._nano = { isSSR: true };", "init.js");
-            
-            // Load the server bundle (this exposes globalThis.renderApp)
-            context.executeStringScript(bundleCode, "server.js");
-            
+            JavaJsBridge.attach(context);
+            context.executeVoidScript(bundleCode, "server.js");
             runtimeThreadLocal.set(runtime);
             contextThreadLocal.set(context);
         }
-        
-        // Execute renderApp and return the rendered HTML string
         String script = "globalThis.renderApp(" + quote(path) + ");";
-        return context.executeStringScript(script, "render.js");
+        try {
+            return (String) context.executeStringScript(script, "render.js");
+        } catch (Exception e) {
+            return "<div style='color:red;'>Java Runtime Error: " + e.getMessage() + "</div>";
+        }
     }
 
     private String quote(String val) {
-        if (val == null) {
-            return "''";
-        }
+        if (val == null) return "''";
         return "'" + val.replace("'", "\\'") + "'";
     }
 }

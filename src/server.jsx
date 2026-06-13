@@ -37,7 +37,10 @@ class MockNode {
     return this.children.map(c => (c && c.toString) ? c.toString() : String(c)).join('');
   }
   toString() {
-    const attrs = Object.keys(this.attributes).map(k => ` ${k}="${this.attributes[k]}"`).join('');
+    const attrs = Object.keys(this.attributes).map(k => {
+      if (k === 'onClick') return ''; 
+      return ` ${k}="${this.attributes[k]}"`;
+    }).join('');
     const inner = this.innerHTML;
     const t = this.tag.toLowerCase();
     if (['meta', 'link', 'br', 'img', 'hr', 'input'].includes(t)) return `<${this.tag}${attrs} />`;
@@ -88,9 +91,8 @@ globalThis.renderApp = (path) => {
     };
     stateJson = JSON.stringify(initialState);
 
-    // Bypassing automated SSR complexity: Explicitly build the MockNode tree
-    globalThis.__INITIAL_STATE__ = initialState; // For useContext in Home/About if needed
-    
+    globalThis.__NANO_CONTEXT__ = initialState; 
+
     const pageContent = path === '/' ? Home() : (path === '/about' ? About() : h('div', null, '404 Not Found'));
     const layoutNode = Layout({ children: [pageContent], currentRoute: path });
     

@@ -1,4 +1,4 @@
-import { h, Component, isSSR } from 'nano-jsx';
+import { h, Component } from 'nano-jsx';
 import { StoreContext } from './context/StoreContext';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';

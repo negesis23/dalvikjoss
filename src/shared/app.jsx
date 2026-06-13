@@ -3,6 +3,7 @@ import { StoreContext } from './context/StoreContext';
 import { Layout } from './components/Layout';
 import { Home } from './pages/Home';
 import { About } from './pages/About';
+import { Test } from './pages/Test';
 import { NotFound } from './pages/NotFound';
 
 export class App extends Component {
@@ -40,13 +41,16 @@ export class App extends Component {
     const { route } = this.state;
     const { initialState } = this.props;
 
+    const path = route.split('?')[0];
+
     let Content = NotFound;
-    if (route === '/') Content = Home;
-    else if (route === '/about') Content = About;
+    if (path === '/') Content = Home;
+    else if (path === '/about') Content = About;
+    else if (path === '/test') Content = Test;
 
     return (
       <StoreContext.Provider value={initialState || {}}>
-        <Layout currentRoute={route}>
+        <Layout currentRoute={path}>
           <Content />
         </Layout>
       </StoreContext.Provider>

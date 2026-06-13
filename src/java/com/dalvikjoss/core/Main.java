@@ -5,6 +5,7 @@ import fi.iki.elonen.NanoHTTPD;
 import java.io.File;
 
 public class Main {
+    public static final long startTime = System.currentTimeMillis();
     public static void main(String[] args) {
         int port = 8080;
         if (args.length > 0) {

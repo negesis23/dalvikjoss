@@ -11,6 +11,7 @@ export const Layout = ({ children, currentRoute }) => {
           <nav>
             <a href="/" className={`nav-link${path === '/' ? ' active' : ''}`}>Home</a>
             <a href="/about" className={`nav-link${path === '/about' ? ' active' : ''}`}>About</a>
+            <a href="/test?demo=ssr" className={`nav-link${path === '/test' ? ' active' : ''}`}>SSR Test</a>
           </nav>
         </div>
       </header>

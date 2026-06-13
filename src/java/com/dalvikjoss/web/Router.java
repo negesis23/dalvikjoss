@@ -1,6 +1,7 @@
 package com.dalvikjoss.web;
 
 import com.dalvikjoss.engine.JsEngine;
+import com.dalvikjoss.core.Main;
 
 import fi.iki.elonen.NanoHTTPD;
 import fi.iki.elonen.NanoHTTPD.IHTTPSession;
@@ -25,14 +26,26 @@ public class Router {
             return staticAssetHandler.handle(uri);
         }
         if (Method.GET.equals(method)) {
-            return handleSsr(uri);
+            return handleSsr(session);
         }
         return NanoHTTPD.newFixedLengthResponse(Response.Status.METHOD_NOT_ALLOWED, "text/plain", "405");
     }
 
-    private Response handleSsr(String uri) {
+    private Response handleSsr(IHTTPSession session) {
         try {
-            String ssrResult = jsEngine.render(uri);
+            String uri = session.getUri();
+            String query = session.getQueryParameterString();
+            if (query == null) query = "";
+            
+            StringBuilder json = new StringBuilder();
+            json.append("{");
+            json.append("\"path\":\"").append(uri).append("\",");
+            json.append("\"query\":\"").append(query.replace("\"", "\\\"")).append("\",");
+            json.append("\"uptime\":").append(System.currentTimeMillis() - Main.startTime).append(",");
+            json.append("\"freeMemory\":").append(Runtime.getRuntime().freeMemory());
+            json.append("}");
+
+            String ssrResult = jsEngine.render(json.toString());
             String html = templateInjector.inject(ssrResult);
             return NanoHTTPD.newFixedLengthResponse(Response.Status.OK, "text/html", html);
         } catch (Exception e) {

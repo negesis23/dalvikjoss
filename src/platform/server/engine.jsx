@@ -1,53 +1,39 @@
-import { h } from 'nano-jsx';
+import { h, renderSSR } from 'nano-jsx';
 import { App } from '../../shared/app';
 import { StoreContext } from '../../shared/context/StoreContext';
 
-export const renderToString = (node) => {
-  if (node === null || node === false || typeof node === 'undefined') return '';
-  if (typeof node === 'string' || typeof node === 'number') return String(node);
-  if (Array.isArray(node)) return node.map(renderToString).join('');
-
-  if (node.tagName) return node.toString();
-
-  if (node.component) {
-    const { component, props } = node;
-    if (component.prototype && component.prototype.render) {
-      const inst = new component(props);
-      return renderToString(inst.render());
-    }
-    if (typeof component === 'function') {
-      return renderToString(component(props));
-    }
-  }
-
-  return '';
-};
-
-export const render = (path) => {
+export const render = (ctx) => {
+  const path = ctx.path || '/';
+  
   globalThis._nano = {
     isSSR: true,
-    location: { pathname: path, search: '' },
+    location: { pathname: path, search: ctx.query ? '?' + ctx.query : '' },
     ssrTricks: { isWebComponent: () => false, renderWebComponent: () => null }
   };
   globalThis.location.pathname = path;
 
-  let fetchedData = {};
-  if (globalThis.javaFetch) {
-    try {
-      fetchedData = JSON.parse(globalThis.javaFetch(path));
-    } catch (e) {}
-  }
+  const initialState = { 
+    route: path, 
+    query: ctx.query || '',
+    serverInfo: {
+      uptime: Number(ctx.uptime) || 0,
+      freeMemory: Number(ctx.freeMemory) || 0,
+      platform: 'Dalvik/QuickJS'
+    },
+    data: { fetched: path, serverTime: Date.now() } 
+  };
 
-  const initialState = { route: path, data: fetchedData };
-  StoreContext.set(initialState);
-
-  const root = <App initialState={initialState} />;
-  const appHtml = renderToString(root);
+  const appHtml = renderSSR(<App initialState={initialState} />);
   const stateJson = JSON.stringify(initialState);
 
-  return { html: appHtml, state: stateJson };
+  return { 
+    html: appHtml, 
+    state: stateJson, 
+    title: globalThis.document.title || 'dalvikjoss' 
+  };
 };
 
 export const assemble = (data) => {
-  return '<HEAD_START><HEAD_END><STATE_START>' + data.state + '<STATE_END><HTML_START>' + data.html + '<HTML_END>';
+  const head = '<title>' + data.title + '</title>';
+  return '<HEAD_START>' + head + '<HEAD_END><STATE_START>' + data.state + '<STATE_END><HTML_START>' + data.html + '<HTML_END>';
 };
